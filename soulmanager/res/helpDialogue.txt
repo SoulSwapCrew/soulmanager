@@ -1,0 +1,17 @@
+soulmanager setup - Create command line alias for soulmanager.
+
+soulmanager profile switch <id> - Switch current profile to <id>.
+soulmanager profile add <id> - Adds a profile to the configuration file.
+soulmanager profile remove <id> - Removes a profile from the configuration file.
+
+soulmanager clear - Clears your haxelib folder.
+soulmanager clear -config - Clears your haxelib folder AND your soulmanager profile's libraries.
+soulmanager install - Installs haxelibs from the current profile.
+soulmanager list - List every profile and all the libraries in them.
+
+soulmanager sfl - Steals the library configurations from Friday Night Funkin' and puts them into their own profile.
+
+* Required
+soulmanager haxelib <*id> <version> - Adds a library to the current profile.
+soulmanager git <*id> <url> <branch> <dir> - Adds a library to the current profile.
+soulmanager dev <*id> <path to folder> - Adds a library to the current profile.

@@ -1,0 +1,16 @@
+{
+	"name": "soulmanager",
+	"license": "MIT",
+	"tags": [
+		"tools",
+		"helpers",
+		"installation"
+	],
+	"description": "Local haxelib package installer",
+	"version": "1.0.0",
+	"releasenote": "Install --update argument",
+	"contributors": [
+		"ADA_Funni"
+	],
+	"main": "soulmanager.Main"
+}
