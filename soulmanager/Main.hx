@@ -1,9 +1,5 @@
 package soulmanager;
 
-import soulmanager.res.FileUtil;
-import soulmanager.data.Library;
-import soulmanager.data.Library.Dev;
-import soulmanager.data.Config;
 import haxe.Http;
 import haxe.Json;
 import haxe.crypto.Base64;
@@ -11,6 +7,10 @@ import haxe.crypto.Md5;
 import haxe.crypto.Sha256;
 import haxe.io.Bytes;
 import haxe.io.Path;
+import soulmanager.data.Config;
+import soulmanager.data.Library.Dev;
+import soulmanager.data.Library;
+import soulmanager.res.FileUtil;
 import sys.FileSystem;
 import sys.io.File;
 
@@ -113,18 +113,17 @@ class Main
 						config.getProfile(profile).libraries.resize(0);
 					}
 
-					var alreadyRemovedLibs:Array<String> = [];
-
 					Sys.println('Retrieving libraries...');
-					for (profile in config.profiles) {
-						Sys.println('\n- ${profile.id} -');
-						for (library in profile.libraries) {
-							if (!alreadyRemovedLibs.contains(library.id)) {
-								Sys.command('haxelib remove ${library.id}');
-								alreadyRemovedLibs.push(library.id);
-							}
-						}
-					}
+
+					final oldProfile:String = profile;
+
+					Sys.command('cd $terminalPath');
+					Sys.command('hmm-rs clean');
+
+					switchProfile(oldProfile);
+
+					Sys.command('cd ./');
+
 					Sys.println("Cleared haxelibs successfully!");
 				} else
 					Sys.println("There's nothing to clear!");
@@ -140,10 +139,21 @@ class Main
 	public static function installLibs() {
 		checkHaxelibFolder();
 
+		// We now must cheat with HMM-RS until I can port the same solution here.
+		File.saveContent('${Main.terminalPath}/hmm.json', '{"dependencies": []}');
+		Sys.command('cd ${Main.terminalPath}');
+
 		var config = Config.defaultConfig();
 		for (library in config.getProfile(profile).libraries) {
 			library.install();
 		}
+
+		// We aren't gonna need this thing anymore!
+		if (FileSystem.exists('${Main.terminalPath}/hmm.json')) {
+			FileSystem.deleteFile('${Main.terminalPath}/hmm.json');
+		}
+
+		Sys.command('cd ./');
 	}
 
 	public static function checkHaxelibFolder()

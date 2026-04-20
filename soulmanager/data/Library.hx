@@ -46,14 +46,7 @@ class Haxelib extends Library
 		super.install();
 
 		// HMM-RS cheat
-		File.saveContent('${Main.terminalPath}/hmm.json', '{"dependencies": []}');
-		Sys.command('cd ${Main.terminalPath}');
 		Sys.command('hmm-rs haxelib $id${version.addSpace()}');
-
-		// We aren't gonna need this thing anymore!
-		if (FileSystem.exists('${Main.terminalPath}/hmm.json')) {
-			FileSystem.deleteFile('${Main.terminalPath}/hmm.json');
-		}
 	}
 
 	override public function uninstall()
@@ -86,15 +79,7 @@ class Git extends Library
 	{
 		super.install();
 
-		// We now must cheat with HMM-RS until I can port the same solution here.
-		File.saveContent('${Main.terminalPath}/hmm.json', '{"dependencies": []}');
-		Sys.command('cd ${Main.terminalPath}');
 		Sys.command('hmm-rs git $id${url.addSpace() + branch.addSpace()}');
-
-		// We aren't gonna need this thing anymore!
-		if (FileSystem.exists('${Main.terminalPath}/hmm.json')) {
-			FileSystem.deleteFile('${Main.terminalPath}/hmm.json');
-		}
 	}
 
 	override public function uninstall()
@@ -123,7 +108,6 @@ class Dev extends Library
 	{
 		super.install();
 
-		Sys.command('cd ${Main.terminalPath}');
 		Sys.command('haxelib dev $id${path.addSpace()} --skip-dependencies');
 	}
 
