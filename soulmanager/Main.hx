@@ -1,9 +1,5 @@
 package soulmanager;
 
-import soulmanager.res.FileUtil;
-import soulmanager.data.Library;
-import soulmanager.data.Library.Dev;
-import soulmanager.data.Config;
 import haxe.Http;
 import haxe.Json;
 import haxe.crypto.Base64;
@@ -11,6 +7,10 @@ import haxe.crypto.Md5;
 import haxe.crypto.Sha256;
 import haxe.io.Bytes;
 import haxe.io.Path;
+import soulmanager.data.Config;
+import soulmanager.data.Library.Dev;
+import soulmanager.data.Library;
+import soulmanager.res.FileUtil;
 import sys.FileSystem;
 import sys.io.File;
 
@@ -140,10 +140,26 @@ class Main
 	public static function installLibs() {
 		checkHaxelibFolder();
 
+		File.saveContent('_soulmanager_shellScript.sh', 'echo Installing libs...');
+		File.saveContent('${Main.terminalPath}hmm.json', '{"dependencies": []}');
+
 		var config = Config.defaultConfig();
 		for (library in config.getProfile(profile).libraries) {
 			library.install();
 		}
+		runShellScript('echo Done!');
+
+		Sys.command('_soulmanager_shellScript.sh');
+		FileSystem.deleteFile('_soulmanager_shellScript.sh');
+
+		// We aren't gonna need this thing anymore!
+		if (FileSystem.exists('${Main.terminalPath}/hmm.json')) {
+			FileSystem.deleteFile('${Main.terminalPath}/hmm.json');
+		}
+	}
+
+	public static function runShellScript(cmd:String) {
+		File.saveContent('_soulmanager_shellScript.sh', File.getContent('_soulmanager_shellScript.sh') + '\n$cmd');
 	}
 
 	public static function checkHaxelibFolder()

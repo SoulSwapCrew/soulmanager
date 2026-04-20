@@ -1,9 +1,9 @@
 package soulmanager.data;
 
-import sys.io.File;
-import soulmanager.res.FileUtil;
 import soulmanager.Main;
+import soulmanager.res.FileUtil;
 import sys.FileSystem;
+import sys.io.File;
 
 using soulmanager.data.StringUtil;
 
@@ -21,7 +21,7 @@ class Library
 
 	public function uninstall()
 	{
-		Sys.command('haxelib remove $id');
+		Main.runShellScript('haxelib remove $id');
 	}
 
 	public function toString():String {
@@ -46,13 +46,7 @@ class Haxelib extends Library
 		super.install();
 
 		// HMM-RS cheat
-		File.saveContent('hmm.json', '{"dependencies": []}');
-		Sys.command('hmm-rs haxelib $id${version.addSpace()}');
-
-		// We aren't gonna need this thing anymore!
-		if (FileSystem.exists('${Main.terminalPath}/hmm.json')) {
-			FileSystem.deleteFile('${Main.terminalPath}/hmm.json');
-		}
+		Main.runShellScript('hmm-rs haxelib $id${version.addSpace()}');
 	}
 
 	override public function uninstall()
@@ -86,13 +80,7 @@ class Git extends Library
 		super.install();
 
 		// We now must cheat with HMM-RS until I can port the same solution here.
-		File.saveContent('hmm.json', '{"dependencies": []}');
-		Sys.command('hmm-rs git $id${url.addSpace() + branch.addSpace()}');
-
-		// We aren't gonna need this thing anymore!
-		if (FileSystem.exists('${Main.terminalPath}/hmm.json')) {
-			FileSystem.deleteFile('${Main.terminalPath}/hmm.json');
-		}
+		Main.runShellScript('hmm-rs git $id${url.addSpace() + branch.addSpace()}');
 	}
 
 	override public function uninstall()
@@ -121,7 +109,7 @@ class Dev extends Library
 	{
 		super.install();
 
-		Sys.command('haxelib dev $id${path.addSpace()} --skip-dependencies');
+		Main.runShellScript('haxelib dev $id${path.addSpace()} --skip-dependencies');
 	}
 
 	override public function uninstall()
