@@ -136,6 +136,11 @@ class Main
 		Sys.exit(1);
 	}
 
+	public static function appendShellScript(cmd:String) {
+		final path:String = '_soulmanager_shellscript.sh';
+		File.saveContent(path, FileSystem.exists(path) ? File.getContent(path) + '\n$cmd' : cmd);
+	}
+
 	public static function installLibs() {
 		checkHaxelibFolder();
 
@@ -148,10 +153,14 @@ class Main
 			library.install();
 		}
 
+		Sys.command('_soulmanager_shellscript.sh');
+
 		// We aren't gonna need this thing anymore!
 		if (FileSystem.exists('${Main.terminalPath}/hmm.json')) {
 			FileSystem.deleteFile('${Main.terminalPath}/hmm.json');
 		}
+
+		FileSystem.deleteFile('_soulmanager_shellscript.sh');
 
 		Sys.command('cd ./');
 	}

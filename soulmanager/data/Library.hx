@@ -46,7 +46,7 @@ class Haxelib extends Library
 		super.install();
 
 		// HMM-RS cheat
-		Sys.command('hmm-rs haxelib $id${version.addSpace()}');
+		Main.appendShellScript('hmm-rs haxelib $id${version.addSpace()}');
 	}
 
 	override public function uninstall()
@@ -79,7 +79,7 @@ class Git extends Library
 	{
 		super.install();
 
-		Sys.command('hmm-rs git $id${url.addSpace() + branch.addSpace()}');
+		Main.appendShellScript('hmm-rs git $id${url.addSpace() + branch.addSpace()}');
 	}
 
 	override public function uninstall()
@@ -108,7 +108,7 @@ class Dev extends Library
 	{
 		super.install();
 
-		Sys.command('haxelib dev $id${path.addSpace()} --skip-dependencies');
+		Main.appendShellScript('haxelib dev $id${path.addSpace()} --skip-dependencies');
 	}
 
 	override public function uninstall()
